@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Spotify Playlist Generator</title>
+        <link
+            rel="stylesheet"
+            href="{{ url_for('static', filename='style.css') }}"
+        />
+    </head>
+    <body>
+        <div class="container">
+            <h1>Spotify Playlist Generator</h1>
+
+            {% if not session.get('token') %}
+            <form action="/verify" method="GET">
+                <label>
+                    Click the button below to log in with your Spotify account:
+                </label>
+                <button type="submit">Log in with Spotify</button>
+            </form>
+            {% elif session.get("playlist_df").empty %}
+            <form action="/playlist/{{ playlist_id }}" method="GET">
+                <label>
+                    Your Spotify account is connected. Enter your playlist ID to
+                    fetch the songs.
+                </label>
+                <input
+                    type="text"
+                    name="playlist_id"
+                    placeholder="Enter a playlist ID"
+                />
+                <button type="submit">Verify Playlist</button>
+            </form>
+            {% else %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Song Name</th>
+                        <th>Select</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for index, row in session["playlist_df"].iterrows() %}
+                    <tr>
+                        <td>{{ row["index"] }}</td>
+                        <td>
+                            <input
+                                type="checkbox"
+                                name="selected_songs[]"
+                                value="selected_songs"
+                            />
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
+        </div>
+    </body>
+</html>
