@@ -2,6 +2,7 @@
 body {
     font-family: sans-serif;
     font-size: 16px;
+    overflow: hidden;
 }
 
 /* Center the component horizontally on the page */
@@ -18,7 +19,7 @@ form {
     display: flex;
     flex-direction: column;
     align-items: center;
-    max-width: 450px;
+    max-width: 500px;
     width: 80%;
     border: 2px solid #ccc;
     border-radius: 8px;
@@ -53,4 +54,63 @@ button {
 button:hover {
     cursor: pointer;
     background-color: #1ed760;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+thead {
+    background-color: #333;
+    color: #fff;
+}
+
+th,
+td {
+    padding: 10px;
+    text-align: left;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tbody tr:hover {
+    background-color: #ddd;
+}
+
+tbody {
+    max-height: 300px;
+    overflow-y: scroll;
+}
+
+input[type="checkbox"] {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.song_list {
+    max-height: 400px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.loading {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 5px solid #ccc;
+    border-top-color: #1db954;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }

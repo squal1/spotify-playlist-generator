@@ -12,14 +12,14 @@
         <div class="container">
             <h1>Spotify Playlist Generator</h1>
 
-            {% if not session.get('token') %}
+            {% if session["step"] == "1" %}
             <form action="/verify" method="GET">
                 <label>
                     Click the button below to log in with your Spotify account:
                 </label>
                 <button type="submit">Log in with Spotify</button>
             </form>
-            {% elif session.get("playlist_df").empty %}
+            {% elif session["step"] == "2" %}
             <form action="/playlist/{{ playlist_id }}" method="GET">
                 <label>
                     Your Spotify account is connected. Enter your playlist ID to
@@ -32,29 +32,75 @@
                 />
                 <button type="submit">Verify Playlist</button>
             </form>
-            {% else %}
-            <table>
-                <thead>
-                    <tr>
-                        <th>Song Name</th>
-                        <th>Select</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for index, row in session["playlist_df"].iterrows() %}
-                    <tr>
-                        <td>{{ row["index"] }}</td>
-                        <td>
-                            <input
-                                type="checkbox"
-                                name="selected_songs[]"
-                                value="selected_songs"
-                            />
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            {% elif session["step"] == "3" %}
+            <form action="/favorite-songs" method="POST">
+                <p>Select the songs you like the most in the list</p>
+                <div class="song_list">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Song Name</th>
+                                <th>Select</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for index, row in
+                            session["playlist_df"].iterrows() %}
+                            <tr>
+                                <td>{{ row["index"] }}</td>
+                                <td>
+                                    <input
+                                        type="checkbox"
+                                        name="{{index}}"
+                                        value='{{ row["index"] }}'
+                                    />
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <button type="submit">Sumbit</button>
+            </form>
+            {% elif session["step"] == "4" %}
+            <form action="/least-favorite-songs" method="POST">
+                <p>Select the songs you like the least in the list</p>
+                <div class="song_list">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Song Name</th>
+                                <th>Select</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for index, row in
+                            session["playlist_df"].iterrows() %} {% if
+                            session["ratings"][index] == 0 %}
+                            <tr>
+                                <td>{{ row["index"] }}</td>
+                                <td>
+                                    <input
+                                        type="checkbox"
+                                        name="{{index}}"
+                                        value='{{ row["index"] }}'
+                                    />
+                                </td>
+                            </tr>
+                            {% endif %} {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <button type="submit">Sumbit</button>
+            </form>
+            {% elif session["step"] == "5" %}
+            <p>
+                The list is generated and should already added to your spotify
+                account
+            </p>
+            {% elif session["step"] == "loading" %}
+            <div class="loading">&nbsp;</div>
+            <p>Getting spotify recommendation list....</p>
             {% endif %}
         </div>
     </body>
